@@ -41,7 +41,6 @@ public class Solution {
                     result += this.arrangeNum(j, len - j);
                 }
                 if(i == 1) break;
-
             }
         }
         if(!numBin.contains("11")) result ++;
