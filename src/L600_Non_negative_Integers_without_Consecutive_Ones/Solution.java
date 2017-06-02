@@ -6,15 +6,17 @@ import com.sun.xml.internal.ws.api.ha.StickyFeature;
  * Created by he on 17-5-31.
  */
 public class Solution {
-    private int arrangeNum(int n, int m){
+    private long arrangeNum(int n, int m){
         if(n == 0) return 1;
-        int num = 1;
+        long num1 = 1;
+        long num2 = 1;
         if(n > m - n)
             n = m - n;
         for(int i = n, j = m; i > 0; i--, j--){
-            num *= j / i;
+            num1 *= i;
+            num2 *= j;
         }
-        return num;
+        return num2 / num1;
     }
     public int findIntegers(int num) {
         if(num == 0) return 1;
@@ -28,11 +30,9 @@ public class Solution {
         for(int i = 0; i <= oneNum; i++){
             result += this.arrangeNum(i, numBinLen - i);
         }
-        boolean one = true;
         for(int i = 1; i < numBinLen; i++){
-            if(!one) continue;
+            if(i > 1 && numBin.charAt(i - 1) == '1' && numBin.charAt(i - 2) == '1') break;
             if(numBin.charAt(i) == '1'){
-                if(i == 1) one = false;
                 int len = numBinLen - i;
                 if((len - 1) % 2 == 0)
                     oneNum = (len -1) / 2;
@@ -40,20 +40,32 @@ public class Solution {
                 for(int j = 0; j <= oneNum; j++){
                     result += this.arrangeNum(j, len - j);
                 }
-            } else {
-                one = true;
+                if(i == 1) break;
+
             }
         }
-        if(num > 7 && numBin.charAt(1) == '1' && numBin.charAt(numBinLen - 1) == '1') result--;
         if(!numBin.contains("11")) result ++;
         return result;
     }
 
     public static void main(String[] args) {
-        Integer a = 11;
-        for(int i = 0; i <= a; i++){
-            System.out.println(Integer.toBinaryString(i));
-        }
+        Integer a = 100000000;
+        int num1 = 0;
+        int num2 = 0;
+        int lenA = Integer.toBinaryString(a).length();
+//        for(int i = 0; i <= a; i++){
+//            String tmpstr = Integer.toBinaryString(i);
+//            if(!tmpstr.contains("11")) {
+//                if(tmpstr.length() == lenA)
+//                    num2++;
+//                else num1++;
+//            }
+//        }
+        System.out.println(num1);
+        System.out.println(num2);
+
+        System.out.println(Integer.toBinaryString(a));
+        System.out.println(Integer.toBinaryString(a).length());
         Solution solution = new Solution();
         System.out.println(solution.findIntegers(a));
     }
