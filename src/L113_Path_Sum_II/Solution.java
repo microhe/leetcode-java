@@ -15,23 +15,25 @@ public class Solution {
     }
     private int sum;
     private List<List<Integer>> res;
-    private boolean hasPathSumHelper(TreeNode node, int tSum, ArrayList<Integer> list){
-        if (node == null) return false;
-        ArrayList<Integer> tmpList = (ArrayList<Integer>) list.clone();
-        tmpList.add(node.val);
-        tSum += node.val;
-        if(tSum == this.sum && node.left == null && node.right == null){
-            res.add(tmpList);
-            return true;
+    private void PathSumHelper(TreeNode node, int tSum, LinkedList<Integer> currentList){
+        if (node == null) return;
+        currentList.addLast(node.val);
+        int tmpSum = tSum + node.val;
+        if(tmpSum == this.sum && node.left == null && node.right == null){
+            res.add(new LinkedList<>(currentList));
+            currentList.removeLast();
+            return;
+        } else {
+            this.PathSumHelper(node.left, tmpSum, currentList);
+            this.PathSumHelper(node.right, tmpSum, currentList);
         }
-        this.hasPathSumHelper(node.left, tSum, tmpList);
-        this.hasPathSumHelper(node.right, tSum, tmpList);
-        return false;
+        currentList.removeLast();
     }
-    public List<List<Integer>> hasPathSum(TreeNode root, int sum) {
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
         this.sum = sum;
-        this.res = new LinkedList<>();
-        this.hasPathSumHelper(root, 0, new ArrayList<Integer>());
+        this.res = new LinkedList<List<Integer>>();
+        LinkedList<Integer> currentList = new LinkedList<>();
+        this.PathSumHelper(root, 0, currentList);
         return  res;
     }
     public void solve(){
@@ -52,7 +54,7 @@ public class Solution {
             else
                 tmpNode.right = new TreeNode(a[i]);
         }
-        System.out.println(this.hasPathSum(rootNode, 22).toString());
+        System.out.println(this.pathSum(rootNode, 22).toString());
     }
     public static void main(String[] args) {
         Solution solution = new Solution();
